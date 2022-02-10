@@ -14,7 +14,7 @@ const HolidayTable = () => {
 
 const handleDelete = async (id) => {
     await axios.delete(`api/holidays/${id}`);
-    setHolidays(holidays.filter((holiday) => holiday._id !== id));
+    setHolidays(holidays.filter((holiday) => holiday?._id !== id));
 };
 
   return (
@@ -36,16 +36,16 @@ const handleDelete = async (id) => {
             return (
               <tr key={index}>
                 <td>
-                  <NavLink to={`/holidays/${holiday._id}`}>
-                    {holiday.name}
+                  <NavLink to={`/holidays/${holiday?._id}`}>
+                    {holiday?.name}
                   </NavLink>
                 </td>
-                <td>{holiday.likes}</td>
+                <td>{holiday?.likes}</td>
                 <td>
-                  <NavLink to={`/holidays/${holiday._id}/edit`}>Edit</NavLink>
+                  <NavLink to={`/holidays/${holiday?._id}/edit`}>Edit</NavLink>
                 </td>
                 <td>
-                  <button onClick={() => handleDelete(holiday._id)}>X</button>
+                  <button onClick={() => handleDelete(holiday?._id)}>X</button>
                 </td>
               </tr>
             );

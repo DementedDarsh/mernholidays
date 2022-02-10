@@ -35,7 +35,7 @@ router.get("/seed", async (req, res) => {
     },
   ];
   try {
-      await Holiday.deleteMany({})
+    await Holiday.deleteMany({});
     const createdHolidays = await Holiday.create(seedHolidays);
     res
       .status(200)
@@ -45,13 +45,77 @@ router.get("/seed", async (req, res) => {
   }
 });
 // GET All Holidays
-
+router.get("/", async (req, res) => {
+  try {
+    const allHolidays = await Holiday.find({});
+    res
+      .status(200)
+      .json({ status: "ok", message: "Get All Holidays", data: allHolidays });
+  } catch (error) {
+    console.log(error);
+  }
+});
 // POST Create New Holiday
-
+router.post("/", async (req, res) => {
+  const newHoliday = req.body;
+  if (!newHoliday.name) {
+    res
+      .status(400)
+      .json({ status: "not ok", message: "Please include a request body" });
+  }
+  try {
+    const createdHoliday = await Holiday.create(newHoliday);
+    res.status(200).json({
+      status: "ok",
+      message: "Create new holiday",
+      data: createdHoliday,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 // GET Individual Holiday
-
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const foundHoliday = await Holiday.findById(id);
+    res.status(200).json({
+      status: "ok",
+      message: "get single holiday",
+      data: foundHoliday,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 // PUT Edit holiday
-
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const changedHoliday = req.body;
+  try {
+    const editedHoliday = await Holiday.findByIdAndUpdate(id, changedHoliday, {
+      new: true,
+    });
+    res
+      .status(200)
+      .json({ status: "ok", message: "edited holiday", data: editedHoliday });
+  } catch (error) {
+    console.log(error);
+  }
+});
 // DELETE delete holiday
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedHoliday = await Holiday.findByIdAndDelete(id);
+    res.status(200).json({
+      status: "ok",
+      message: "deleted holiday",
+      data: deletedHoliday,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 module.exports = router;

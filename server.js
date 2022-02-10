@@ -3,6 +3,7 @@ const { urlencoded } = require("express");
 const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
+const holidayController = require("./controllers/holidaysController")
 
 //* config
 require("dotenv").config();
@@ -27,6 +28,9 @@ mongoose.connection.once("open", () => {
 app.use(express.static(path.join(__dirname, "./client/build")));
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
+
+//* Middleware for routes
+app.use("/api/holidays", holidayController);
 
 //* routes
 app.use("/api/test", (req, res) => {
